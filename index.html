@@ -1,0 +1,594 @@
+<title>Poke Jay | Chef-Driven Poke in Downtown Boca Raton</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Poke Jay is a chef-driven poke restaurant in downtown Boca Raton serving fresh fish, bold house-made flavors, and fully customizable bowls. Seed-oil-free, scratch-made daily.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          cream: '#FAF8F4',
+          ink: '#0A0A0A',
+          yellow: '#FFC627',
+          yellowDark: '#E6A800',
+          coral: '#FF5B5B',
+          coralDark: '#E14545',
+          seaweed: '#0E4B3D',
+          seaweedLight: '#155C4B',
+          ocean: '#00B6E3',
+          stone: '#E6E6E6',
+        },
+        fontFamily: {
+          sans: ['Inter', 'sans-serif'],
+          display: ['Poppins', 'sans-serif'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #FAF8F4;
+    color: #0A0A0A;
+    overflow-x: clip;
+  }
+  .container-text {
+    max-width: 1400px;
+    margin-inline: auto;
+    padding-inline: clamp(1.25rem, 1rem + 2.5vw, 2.5rem);
+  }
+
+  h1, h2, h3, .font-display { letter-spacing: -0.03em; }
+  p, li { line-height: 1.7; }
+
+  /* grain texture overlay */
+  .grain { position: relative; isolation: isolate; }
+  .grain::before {
+    content: "";
+    position: absolute; inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: .045;
+    mix-blend-mode: multiply;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .grain > * { position: relative; z-index: 1; }
+
+  /* subtle scale/scallop texture for dark sections */
+  .scallop-texture {
+    background-image:
+      radial-gradient(circle at 0 100%, transparent 0 20px, rgba(255,255,255,.055) 20px 22px, transparent 22px),
+      radial-gradient(circle at 100% 100%, transparent 0 20px, rgba(255,255,255,.055) 20px 22px, transparent 22px);
+    background-size: 44px 44px;
+  }
+
+  .dot-texture {
+    background-image: radial-gradient(rgba(255,91,91,.16) 1px, transparent 1.6px);
+    background-size: 15px 15px;
+  }
+
+  /* sticker badges */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: .5em 1.15em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    box-shadow: 0 6px 16px -6px rgba(10,10,10,.25);
+    transform: rotate(var(--r, -6deg));
+    white-space: nowrap;
+    letter-spacing: .01em;
+  }
+
+  /* wavy section dividers */
+  .wave-top, .wave-bottom {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: clamp(2.5rem, 6vw, 5rem);
+    line-height: 0;
+  }
+  .wave-top { top: -1px; transform: translateY(-99%); }
+  .wave-bottom { bottom: -1px; transform: translateY(99%); }
+  .wave-top svg, .wave-bottom svg { width: 100%; height: 100%; display: block; }
+
+  .btn-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: .6em;
+    background: #FFC627;
+    color: #0A0A0A;
+    border-radius: 999px;
+    padding: .85em 2.2em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    box-shadow: 0 8px 22px -8px rgba(255,198,39,.55), 0 5px 0 #E6A800;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .btn-pill:hover { transform: translateY(-2px); box-shadow: 0 10px 26px -6px rgba(255,198,39,.6), 0 7px 0 #E6A800; }
+  .btn-pill:active { transform: translateY(2px); box-shadow: 0 4px 12px -6px rgba(255,198,39,.5), 0 2px 0 #E6A800; }
+  .btn-pill:focus-visible { outline: 3px solid #0E4B3D; outline-offset: 3px; }
+
+  .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    background: #fff;
+    border: 2px solid #0E4B3D;
+    color: #0E4B3D;
+    border-radius: 999px;
+    padding: .8em 2em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 1.02rem;
+    transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+  }
+  .btn-outline:hover { background: #0E4B3D; color: #fff; transform: translateY(-2px); }
+  .btn-outline:active { transform: scale(.96); }
+  .btn-outline:focus-visible { outline: 3px solid #FF5B5B; outline-offset: 3px; }
+
+  .btn-outline-white {
+    display: inline-flex;
+    align-items: center;
+    gap: .55em;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 999px;
+    padding: .75em 1.7em;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: background-color 150ms ease, color 150ms ease, transform 150ms ease;
+  }
+  .btn-outline-white:hover { background: #fff; color: #0E4B3D; transform: translateY(-2px); }
+  .btn-outline-white:active { transform: scale(.96); }
+  .btn-outline-white:focus-visible { outline: 3px solid #FFC627; outline-offset: 3px; }
+
+  nav a, nav button { transition: color 250ms ease; }
+  .footer-link { transition: color 200ms ease; }
+  .footer-link:hover { color: #FF5B5B; }
+  .footer-link:focus-visible { outline: 2px solid #FF5B5B; outline-offset: 3px; border-radius: 4px; }
+
+  .card-elevated {
+    box-shadow: 0 18px 40px -18px rgba(14,75,61,.22), 0 6px 14px -8px rgba(255,198,39,.28);
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 700ms cubic-bezier(.16,1,.3,1), transform 700ms cubic-bezier(.16,1,.3,1);
+  }
+  .reveal.in { opacity: 1; transform: translateY(0); }
+  .reveal-stagger.in > * { opacity: 1; transform: translateY(0) rotate(var(--r,0deg)); }
+  .reveal-stagger > * {
+    opacity: 0;
+    transform: translateY(24px) rotate(var(--r,0deg));
+    transition: opacity 600ms cubic-bezier(.16,1,.3,1), transform 600ms cubic-bezier(.16,1,.3,1);
+  }
+  .reveal-stagger.in > *:nth-child(1) { transition-delay: 0ms; }
+  .reveal-stagger.in > *:nth-child(2) { transition-delay: 90ms; }
+  .reveal-stagger.in > *:nth-child(3) { transition-delay: 180ms; }
+  .reveal-stagger.in > *:nth-child(4) { transition-delay: 270ms; }
+  .reveal-stagger.in > *:nth-child(5) { transition-delay: 360ms; }
+  .reveal-stagger.in > *:nth-child(6) { transition-delay: 450ms; }
+  .reveal-stagger.in > *:nth-child(7) { transition-delay: 540ms; }
+  .reveal-stagger.in > *:nth-child(8) { transition-delay: 630ms; }
+
+  .float { animation: floaty 5s ease-in-out infinite; }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0) rotate(var(--r,0deg)); }
+    50% { transform: translateY(-14px) rotate(var(--r,0deg)); }
+  }
+
+  /* hero background gallery */
+  @keyframes hero-gallery-scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .hero-gallery-track { animation: hero-gallery-scroll 32s linear infinite; }
+  .hero-gallery-mask {
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, black 12%, black 88%, transparent 100%);
+  }
+
+  .hamburger-line { transition: transform 300ms cubic-bezier(.34,1.56,.64,1), opacity 200ms ease; transform-origin: center; }
+  #nav-toggle[aria-expanded="true"] .line-1 { transform: translateY(6px) rotate(45deg); }
+  #nav-toggle[aria-expanded="true"] .line-2 { opacity: 0; }
+  #nav-toggle[aria-expanded="true"] .line-3 { transform: translateY(-6px) rotate(-45deg); }
+
+  #mobile-nav {
+    transition: opacity 350ms ease, visibility 350ms ease;
+    visibility: hidden;
+    opacity: 0;
+  }
+  #mobile-nav.open { visibility: visible; opacity: 1; }
+  #mobile-nav a {
+    transition: color 200ms ease, transform 250ms cubic-bezier(.34,1.56,.64,1), opacity 300ms ease;
+    transform: translateY(12px);
+    opacity: 0;
+  }
+  #mobile-nav.open a { transform: translateY(0); opacity: 1; }
+  #mobile-nav a:hover { color: #FF5B5B; }
+
+  .tag-chip {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    font-size: .72rem;
+    font-weight: 600;
+    letter-spacing: .03em;
+    padding: .3em .75em;
+    text-transform: uppercase;
+  }
+
+  .menu-card { transition: transform 200ms ease, box-shadow 200ms ease; }
+  .menu-card:hover { transform: translateY(-4px); }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-stagger > *, .float, .btn-pill, .btn-outline, .btn-outline-white, .hamburger-line, .menu-card, .hero-gallery-track { transition: none; animation: none; }
+    .reveal, .reveal-stagger > * { opacity: 1; transform: none; }
+  }
+</style>
+
+<body class="antialiased">
+
+  <!-- NAV -->
+  <nav id="site-nav" class="fixed top-0 inset-x-0 z-50 flex items-center justify-between px-[clamp(1.25rem,4vw,2.5rem)] py-[clamp(.3rem,.8vw,.5rem)] bg-cream/90 backdrop-blur-sm">
+    <a href="#top" class="flex items-center select-none" id="nav-logo" aria-label="Poke Jay, home">
+      <img src="brand_assets/PokeJayLogo.png" alt="" class="h-16 md:h-20 w-16 md:w-20 object-contain shrink-0" style="filter: drop-shadow(0 3px 6px rgba(10,10,10,.18));">
+    </a>
+    <div class="flex items-center gap-3">
+      <div class="hidden lg:flex items-center gap-7 mr-2 font-display font-semibold text-sm text-ink">
+        <a href="#menu" class="hover:text-coral">Menu</a>
+        <a href="#about" class="hover:text-coral">About</a>
+        <a href="#visit" class="hover:text-coral">Visit</a>
+      </div>
+      <a href="tel:+15614094283" class="btn-pill !py-[.55em] !px-[1.5em] !text-[.85rem]">Order Now</a>
+      <button id="nav-toggle" aria-expanded="false" aria-controls="mobile-nav" aria-label="Toggle menu" class="btn-outline !py-[.55em] !px-[1.1em] !text-[.85rem] lg:hidden">
+        <span class="relative w-4 h-3 flex flex-col justify-between shrink-0">
+          <span class="hamburger-line line-1 block h-[1.5px] w-full bg-current"></span>
+          <span class="hamburger-line line-2 block h-[1.5px] w-full bg-current"></span>
+          <span class="hamburger-line line-3 block h-[1.5px] w-full bg-current"></span>
+        </span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- MOBILE NAV -->
+  <nav id="mobile-nav" class="fixed inset-0 z-40 bg-cream flex items-center justify-center">
+    <ul class="flex flex-col items-center gap-7 text-3xl font-display font-bold text-ink">
+      <li><a href="#top" style="transition-delay:60ms">Home</a></li>
+      <li><a href="#menu" style="transition-delay:110ms">Menu</a></li>
+      <li><a href="#about" style="transition-delay:160ms">About</a></li>
+      <li><a href="#visit" style="transition-delay:210ms">Visit</a></li>
+    </ul>
+  </nav>
+
+  <main id="top">
+
+    <!-- HERO -->
+    <section class="grain relative w-full flex flex-col items-center pt-[clamp(6.5rem,10vw,9rem)] pb-10 overflow-hidden" style="background: radial-gradient(60% 50% at 15% 12%, rgba(255,198,39,.28), transparent), radial-gradient(55% 45% at 88% 20%, rgba(255,91,91,.16), transparent), radial-gradient(70% 55% at 50% 100%, rgba(0,182,227,.10), transparent);">
+
+      <!-- Background scrolling gallery -->
+      <div class="absolute inset-0 -z-10 overflow-hidden pointer-events-none flex items-center justify-center" aria-hidden="true">
+        <div class="hero-gallery-mask w-full">
+          <div class="hero-gallery-track flex gap-6 w-max opacity-50">
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay2.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay1.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay4.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay3.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay6.png" alt="" class="w-full h-full object-cover object-bottom" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay9.png" alt="" class="w-full h-full object-cover object-bottom" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay2.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay1.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay4.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay3.png" alt="" class="w-full h-full object-cover" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay6.png" alt="" class="w-full h-full object-cover object-bottom" loading="lazy"></div>
+            <div class="flex-shrink-0 w-40 h-40 md:w-56 md:h-56 lg:w-64 lg:h-64 rounded-xl overflow-hidden shadow-xl"><img src="brand_assets/Media/PokeJay9.png" alt="" class="w-full h-full object-cover object-bottom" loading="lazy"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="container-text relative w-full text-center">
+        <h1 class="relative z-10 font-display font-extrabold uppercase text-ink text-[clamp(2.5rem,11vw,7rem)] leading-[.92]">
+          Poke <span class="text-yellow" style="-webkit-text-stroke: 2px #0A0A0A; paint-order: stroke fill;">Jay</span>
+        </h1>
+
+        <img src="brand_assets/Media/PokeJayHeroImage.png" alt="Poke Jay signature bowl with crab, masago, and pickled ginger" class="relative z-0 mx-auto w-[clamp(220px,30vw,460px)] mt-[clamp(-5.5rem,-6vw,-2rem)] pointer-events-none float" style="--r:-2deg; filter: drop-shadow(0 25px 35px rgba(255,198,39,.35)) drop-shadow(0 10px 18px rgba(14,75,61,.25));">
+
+        <div class="reveal in flex flex-wrap items-center justify-center gap-4 -mt-12">
+          <a href="tel:+15614094283" class="btn-pill">Order Now</a>
+          <a href="#menu" class="btn-outline">View Menu</a>
+        </div>
+        <span class="sticker inline-flex mt-6 bg-white text-seaweed text-[clamp(.7rem,1.2vw,.9rem)]" style="--r:-3deg;">★ 4.7 &middot; 600+ Google Reviews</span>
+      </div>
+    </section>
+
+    <!-- ABOUT / OUR VIBE -->
+    <section id="about" class="relative w-full py-[clamp(3rem,8vw,6rem)] text-center overflow-hidden">
+      <video class="absolute inset-0 z-0 w-full h-full object-cover" src="brand_assets/Media/PokeJayAboutVideo.mp4" autoplay muted loop playsinline disablePictureInPicture aria-hidden="true"></video>
+      <div class="absolute inset-0 z-0 bg-black/55"></div>
+
+      <div class="container-text relative z-10">
+        <h2 class="reveal font-display font-extrabold uppercase text-white text-[clamp(2.4rem,8vw,5.5rem)] leading-[1.02]" style="transition-delay:80ms;">
+          Fresh Ingredients.<br>Bold Flavors.<br><span class="text-yellow">Good Energy.</span>
+        </h2>
+        <p class="reveal max-w-xl mx-auto mt-6 text-[clamp(.92rem,1.3vw,1.05rem)] text-white/85" style="transition-delay:140ms;">
+          Poke Jay brings island energy and global inspiration together in a fun, welcoming space near Mizner Park. Every bowl is cut, mixed, and made from scratch daily &mdash; fresh fish, house-made sauces, and conscious ingredient choices. No seed oils, no shortcuts.
+        </p>
+        <a href="#menu" class="btn-pill reveal mt-8" style="transition-delay:200ms;">View The Menu</a>
+      </div>
+    </section>
+
+    <!-- MENU -->
+    <section id="menu" class="dot-texture relative w-full py-[clamp(2rem,4.5vw,3.5rem)] overflow-hidden">
+      <div class="container-text relative text-center">
+        <h2 class="reveal font-display font-extrabold uppercase text-ink text-[clamp(2.2rem,7vw,4.5rem)]" style="transition-delay:80ms;">
+          Signature Poke Bowls
+        </h2>
+        <p class="reveal max-w-xl mx-auto mt-4 text-[clamp(.9rem,1.3vw,1.05rem)] text-ink/75" style="transition-delay:120ms;">
+          Chef-created combinations, or build your own from scratch. Every bowl starts with your choice of base and can be customized for vegan, vegetarian, gluten-free-friendly, and rice-free diets.
+        </p>
+
+        <img src="brand_assets/Media/PokeJay7.png" alt="A spread of Poke Jay signature bowls with mango, avocado, tuna, salmon, and eel" class="reveal mt-10 w-full max-w-4xl mx-auto rounded-3xl object-cover aspect-[16/8] card-elevated" style="transition-delay:160ms;">
+      </div>
+
+      <div class="container-text relative">
+        <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mt-14 text-left" style="transition-delay:200ms;">
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-coral">
+            <p class="font-display font-bold text-ink text-lg">Nemo &amp; Iron Man</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Sushi Rice Base</p>
+            <p class="text-sm text-ink/70 mt-2">Salmon, tuna, spicy mayo, house-blend sauce, masago, scallion, mango, cucumber, kaiso seaweed, sesame seeds.</p>
+            <span class="tag-chip bg-coral/10 text-coral mt-3">Contains Raw Fish</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-ocean">
+            <p class="font-display font-bold text-ink text-lg">Tunado</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Thai Berry Brown Rice</p>
+            <p class="text-sm text-ink/70 mt-2">Tuna, house-blend sauce, avocado, masago, red onion, scallion, crispy shallot, masago arare.</p>
+            <span class="tag-chip bg-coral/10 text-coral mt-3">Contains Raw Fish</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-yellow">
+            <p class="font-display font-bold text-ink text-lg">Spicy Krab</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Sushi Rice Base</p>
+            <p class="text-sm text-ink/70 mt-2">Spicy krab, spicy mayo, avocado, masago, cucumber, crispy shallot, sesame seeds.</p>
+            <span class="tag-chip bg-seaweed/10 text-seaweed mt-3">No Raw Fish</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-coral">
+            <p class="font-display font-bold text-ink text-lg">Hurricane</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Sushi Rice Base</p>
+            <p class="text-sm text-ink/70 mt-2">Hamachi, house-blend sauce, red onion, cilantro, scallion, tomato, pineapple, orange, seaweed salad, lime, crispy garlic.</p>
+            <span class="tag-chip bg-coral/10 text-coral mt-3">Contains Raw Fish</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-seaweed">
+            <p class="font-display font-bold text-ink text-lg">Samurai</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Spring Kaiso Base</p>
+            <p class="text-sm text-ink/70 mt-2">Salmon, yum sauce, red onion, cilantro, scallion, tomato, cucumber, crushed peanuts.</p>
+            <span class="tag-chip bg-coral/10 text-coral mt-3">Contains Raw Fish</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-yellowDark">
+            <p class="font-display font-bold text-ink text-lg">Unagi Don</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Sushi Rice Base</p>
+            <p class="text-sm text-ink/70 mt-2">Barbecue eel, eel sauce, roasted black seaweed, seaweed salad, pickled radish, masago, scallions.</p>
+            <span class="tag-chip bg-seaweed/10 text-seaweed mt-3">Cooked</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-seaweed">
+            <p class="font-display font-bold text-ink text-lg">Vegan Lover</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">Sushi Rice Base</p>
+            <p class="text-sm text-ink/70 mt-2">Marinated tofu, sesame-garlic soy sauce, seaweed salad, kaiso seaweed, scallion, togarashi.</p>
+            <span class="tag-chip bg-seaweed/10 text-seaweed mt-3">Vegan</span>
+          </div>
+
+          <div class="menu-card bg-white rounded-2xl p-5 card-elevated border-t-4 border-ocean">
+            <p class="font-display font-bold text-ink text-lg">Tuna Avocado</p>
+            <p class="text-xs uppercase tracking-wide text-seaweed font-semibold mt-1">No Rice &mdash; Whole Avocado</p>
+            <p class="text-sm text-ink/70 mt-2">Tuna, house-blend sauce, masago, scallion, cilantro, seaweed salad, crushed peanuts.</p>
+            <span class="tag-chip bg-coral/10 text-coral mt-3">Raw Fish</span>
+            <span class="tag-chip bg-seaweed/10 text-seaweed mt-3 ml-1">Rice-Free</span>
+          </div>
+        </div>
+
+        <!-- BUILD YOUR OWN + RICE-FREE -->
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-5 mt-8" style="transition-delay:100ms;">
+          <div class="bg-white rounded-2xl p-6 card-elevated text-left">
+            <p class="font-display font-bold text-ink text-xl">Build Your Own</p>
+            <p class="text-sm text-ink/70 mt-2">Pick your base, protein, and toppings &mdash; every bowl can be built from scratch to fit the way you eat.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="tag-chip bg-stone text-ink">Sushi Rice</span>
+              <span class="tag-chip bg-stone text-ink">Thai Berry Brown Rice</span>
+              <span class="tag-chip bg-stone text-ink">Spring Mix</span>
+              <span class="tag-chip bg-stone text-ink">Spring Kaiso</span>
+              <span class="tag-chip bg-stone text-ink">Half &amp; Half Rice</span>
+            </div>
+          </div>
+          <div class="bg-white rounded-2xl p-6 card-elevated text-left">
+            <p class="font-display font-bold text-ink text-xl">Dietary Options</p>
+            <p class="text-sm text-ink/70 mt-2">Vegan, vegetarian, gluten-free-friendly, and rice-free bowls are always available &mdash; just ask.</p>
+            <div class="flex flex-wrap gap-2 mt-4">
+              <span class="tag-chip bg-seaweed/10 text-seaweed">Vegan</span>
+              <span class="tag-chip bg-seaweed/10 text-seaweed">Vegetarian</span>
+              <span class="tag-chip bg-seaweed/10 text-seaweed">Gluten-Free-Friendly</span>
+              <span class="tag-chip bg-seaweed/10 text-seaweed">Rice-Free</span>
+              <span class="tag-chip bg-seaweed/10 text-seaweed">Seed-Oil-Free</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ROTATING SPECIALS + BEVERAGES -->
+        <div class="reveal grid grid-cols-1 md:grid-cols-2 gap-5 mt-5" style="transition-delay:140ms;">
+          <div class="bg-ink text-cream rounded-2xl p-6 card-elevated text-left">
+            <span class="tag-chip bg-yellow text-ink">Rotates Weekly</span>
+            <p class="font-display font-bold text-xl mt-3">Weekend Hot-Food Specials</p>
+            <p class="text-sm text-cream/75 mt-2">Our hot-food menu changes weekly &mdash; recent specials have included Jamaican-style jerk chicken, Hawaiian luau pork shoulder, Florida mango salsa, and hamachi poke boxes. Ask in-store or check our Instagram for what's cooking this weekend.</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 card-elevated text-left">
+            <p class="font-display font-bold text-ink text-xl">Beverages</p>
+            <p class="text-sm text-ink/70 mt-2">Bottled water and Ito En jasmine green tea are always in the cooler, alongside a rotating selection of fresh-made juices.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VISIT -->
+    <section id="visit" class="grain relative w-full bg-yellow py-[clamp(4rem,9vw,7rem)] overflow-hidden">
+      <div class="wave-top text-yellow">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path fill="currentColor" d="M0,60 C240,120 360,0 600,40 C840,80 960,10 1200,50 C1320,70 1380,60 1440,50 L1440,100 L0,100 Z"/></svg>
+      </div>
+      <div class="container-text relative">
+        <div class="grid md:grid-cols-2 gap-10 md:gap-8 items-center">
+          <div>
+            <span class="sticker reveal bg-white text-ink text-[clamp(.75rem,1.3vw,1rem)]" style="--r:-5deg;">Visit Us</span>
+            <h2 class="reveal font-display font-extrabold uppercase text-ink text-[clamp(2.2rem,7vw,4.5rem)] mt-5 leading-[1.02]" style="transition-delay:80ms;">
+              Downtown Boca,<br>Ready When You Are
+            </h2>
+            <p class="reveal max-w-md mt-6 text-[clamp(.9rem,1.3vw,1.05rem)] text-ink/80" style="transition-delay:140ms;">
+              Find us just off Mizner Park and Mizner Plaza in the heart of downtown Boca Raton. Walk in, call ahead, or order for pickup and delivery &mdash; with limited dine-in seating on-site.
+            </p>
+          </div>
+          <div class="reveal mx-auto w-full max-w-[260px] md:max-w-[280px]" style="transition-delay:180ms;">
+            <video class="w-full aspect-[9/16] object-cover rounded-[2rem] card-elevated" src="brand_assets/Media/PokeJayIGReel.mp4" autoplay muted loop playsinline disablePictureInPicture></video>
+          </div>
+        </div>
+
+        <div class="reveal-stagger grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-10 text-left" style="transition-delay:200ms;">
+          <div class="bg-white rounded-2xl p-6 card-elevated">
+            <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-coral" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg>
+            <p class="font-display font-bold text-ink text-base mt-3">Address</p>
+            <p class="text-sm text-ink/70 mt-1 leading-snug">110 NE 2nd Street<br>Boca Raton, FL 33432<br>Near Mizner Park</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 card-elevated">
+            <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-seaweed" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>
+            <p class="font-display font-bold text-ink text-base mt-3">Hours</p>
+            <p class="text-sm text-ink/70 mt-1 leading-snug">Mon&ndash;Thu: 10:30am&ndash;9:30pm<br>Fri&ndash;Sat: 10:30am&ndash;10:00pm<br>Sun: 10:30am&ndash;9:30pm</p>
+          </div>
+          <div class="bg-white rounded-2xl p-6 card-elevated">
+            <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-ocean" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6 19.8 19.8 0 0 1-3.1-8.6A2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.7a16 16 0 0 0 6 6l1.2-1.2a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6a2 2 0 0 1 1.7 2Z"/></svg>
+            <p class="font-display font-bold text-ink text-base mt-3">Call to Order</p>
+            <a href="tel:+15614094283" class="text-sm text-ink/70 mt-1 leading-snug block hover:text-coral">(561) 409-4283</a>
+          </div>
+          <div class="bg-white rounded-2xl p-6 card-elevated">
+            <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-yellowDark" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 7h12l1 13a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2L6 7Z"/><path d="M9 7V6a3 3 0 0 1 6 0v1"/></svg>
+            <p class="font-display font-bold text-ink text-base mt-3">Delivery</p>
+            <div class="flex flex-col gap-1 mt-1">
+              <a href="https://www.doordash.com/" target="_blank" rel="noopener" class="text-sm text-ink/70 hover:text-coral">Order on DoorDash</a>
+              <a href="https://www.grubhub.com/" target="_blank" rel="noopener" class="text-sm text-ink/70 hover:text-coral">Order on Grubhub</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wave-bottom text-cream">
+        <svg viewBox="0 0 1440 100" preserveAspectRatio="none"><path fill="currentColor" d="M0,50 C240,10 360,80 600,40 C840,0 960,70 1200,30 C1320,10 1380,30 1440,40 L1440,0 L0,0 Z"/></svg>
+      </div>
+    </section>
+
+    <!-- CTA / TASTE THE DIFFERENCE -->
+    <section id="order" class="relative w-full overflow-hidden">
+      <div class="grid md:grid-cols-2 items-center">
+        <div class="container-text !max-w-none pt-8 pb-16 md:py-0 md:self-start md:pt-40 md:order-2">
+          <h2 class="reveal font-display font-extrabold uppercase text-ink text-[clamp(2.4rem,7vw,4.2rem)] leading-[1.02]" style="transition-delay:80ms;">
+            Taste The<br>Difference
+          </h2>
+          <p class="reveal max-w-sm mt-6 text-[clamp(.9rem,1.3vw,1.05rem)] text-ink/75" style="transition-delay:140ms;">
+            Fresh fish, bold house-made sauces, and a bowl built exactly your way. One of South Florida&rsquo;s highest-rated poke spots &mdash; taste why.
+          </p>
+          <div class="reveal flex flex-wrap gap-4 mt-8" style="transition-delay:200ms;">
+            <a href="tel:+15614094283" class="btn-pill">Order Now</a>
+            <a href="#visit" class="btn-outline">Get Directions</a>
+          </div>
+        </div>
+        <img src="brand_assets/Media/PokeJay5.png" alt="Poke Jay bowl with avocado, jalapeño, and sesame held in front of a garden wall" class="w-full h-full object-cover aspect-[4/5] md:aspect-auto md:min-h-[32rem] md:order-1">
+      </div>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="relative w-full pt-14 pb-4 overflow-hidden bg-ink text-cream">
+    <div class="container-text">
+      <div class="flex flex-wrap items-start justify-between gap-10">
+        <div class="flex items-center gap-3">
+          <img src="brand_assets/PokeJayLogo.png" alt="Poke Jay" class="h-16 w-16 object-contain">
+          <div>
+            <p class="font-display font-bold text-lg">Poke Jay</p>
+            <p class="text-xs text-cream/60 mt-0.5">Chef-driven poke. Made from scratch.</p>
+          </div>
+        </div>
+
+        <nav aria-label="Footer navigation" class="flex flex-wrap items-center gap-x-8 gap-y-2 font-display font-semibold text-sm uppercase tracking-wide">
+          <a href="#top" class="footer-link">Home</a>
+          <a href="#menu" class="footer-link">Menu</a>
+          <a href="#about" class="footer-link">About</a>
+          <a href="#visit" class="footer-link">Visit</a>
+        </nav>
+
+        <div class="text-sm text-cream/80 leading-relaxed">
+          <p>110 NE 2nd Street, Boca Raton, FL 33432</p>
+          <a href="tel:+15614094283" class="footer-link block">(561) 409-4283</a>
+          <div class="flex items-center gap-4 mt-2">
+            <a href="https://instagram.com/pokejayy" target="_blank" rel="noopener" class="footer-link">Instagram @pokejayy</a>
+            <a href="https://facebook.com" target="_blank" rel="noopener" class="footer-link">Facebook</a>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-cream/15 mt-8">
+
+      <div class="mt-5 text-xs text-cream/55 leading-relaxed max-w-3xl">
+        <p>Consumer Advisory: Consuming raw or undercooked fish, shellfish, or eggs may increase your risk of foodborne illness, especially if you have certain medical conditions.</p>
+        <p class="mt-2">Allergen Notice: Our menu contains fish, shellfish, soy, sesame, peanuts, gluten, and egg (in mayo-based sauces). Please inform our team of any allergies &mdash; cross-contact is possible.</p>
+      </div>
+
+      <div class="flex flex-wrap items-center justify-between gap-4 mt-6 text-xs text-cream/55">
+        <p>&copy; <span id="year"></span> Poke Jay &mdash; All Rights Reserved</p>
+        <p>Downtown Boca Raton &middot; Near Mizner Park</p>
+      </div>
+    </div>
+    <p class="font-display font-extrabold uppercase text-[clamp(3.5rem,22vw,16rem)] text-center leading-[.85] mt-8 select-none text-cream/[.06]" aria-hidden="true">
+      Poke Jay
+    </p>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileNav = document.getElementById('mobile-nav');
+    const setNavOpen = (open) => {
+      navToggle.setAttribute('aria-expanded', String(open));
+      mobileNav.classList.toggle('open', open);
+      document.body.style.overflow = open ? 'hidden' : '';
+    };
+    navToggle.addEventListener('click', () => {
+      setNavOpen(navToggle.getAttribute('aria-expanded') !== 'true');
+    });
+    mobileNav.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', () => setNavOpen(false));
+    });
+
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.2, rootMargin: '0px 0px -8% 0px' });
+    document.querySelectorAll('.reveal, .reveal-stagger').forEach((el) => io.observe(el));
+  </script>
+</body>
